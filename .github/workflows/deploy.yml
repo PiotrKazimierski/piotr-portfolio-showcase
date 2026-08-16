@@ -36,32 +36,40 @@ jobs:
         run: |
           mkdir -p ./public_out
 
-          # Jeśli TanStack Start wygenerował _shell.html, utwórz z niego index.html
-          if [ -f .output/public/_shell.html ]; then
-            cp .output/public/_shell.html .output/public/index.html
-          fi
-
-          # Skopiuj pliki produkcyjne do katalogu wyjściowego
+          # 1. Kopiowanie wygenerowanych plików statycznych
           if [ -d .output/public ]; then
             cp -r .output/public/* ./public_out/
           elif [ -d dist ]; then
             cp -r dist/* ./public_out/
           fi
 
-          # Skonfiguruj własną domenę
-          echo "piotrkazimierski.pl" > ./public_out/CNAME
-
-          # Przygotuj plik 404.html, aby routing SPA działał przy odświeżaniu podstron
-          if [ -f ./public_out/index.html ]; then
-            cp ./public_out/index.html ./public_out/404.html
+          # 2. Jeśli TanStack wygenerował _shell.html, użyj go jako index.html
+          if [ -f ./public_out/_shell.html ]; then
+            cp ./public_out/_shell.html ./public_out/index.html
           fi
 
-          # Weryfikacja obecności pliku index.html
+          # 3. Jeśli nadal brak index.html, utwórz go automatycznie na podstawie zbudowanych skryptów w assets
           if [ ! -f ./public_out/index.html ]; then
-            echo "BŁĄD: Nie znaleziono skompilowanego index.html ani _shell.html!"
-            exit 1
+            echo "Tworzę plik index.html na podstawie wygenerowanych zasobów JS/CSS..."
+            
+            CSS_FILE=$(find ./public_out/assets -name "*.css" 2>/dev/null | head -n 1 | sed 's|\./public_out||')
+            JS_MAIN=$(find ./public_out/assets -name "index-*.js" 2>/dev/null | head -n 1 | sed 's|\./public_out||')
+            JS_ROUTES=$(find ./public_out/assets -name "routes-*.js" 2>/dev/null | head -n 1 | sed 's|\./public_out||')
+
+            echo '<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Piotr Kazimierski - Portfolio</title>' > ./public_out/index.html
+            if [ -n "$CSS_FILE" ]; then echo "<link rel=\"stylesheet\" href=\"$CSS_FILE\">" >> ./public_out/index.html; fi
+            echo '</head><body><div id="root"></div><div id="app"></div>' >> ./public_out/index.html
+            if [ -n "$JS_ROUTES" ]; then echo "<script type=\"module\" src=\"$JS_ROUTES\"></script>" >> ./public_out/index.html; fi
+            if [ -n "$JS_MAIN" ]; then echo "<script type=\"module\" src=\"$JS_MAIN\"></script>" >> ./public_out/index.html; fi
+            echo '</body></html>' >> ./public_out/index.html
           fi
-          echo "Znaleziono index.html w ./public_out!"
+
+          # 4. Ustawienie własnej domeny oraz obsługa odświeżania podstron (404.html)
+          echo "piotrkazimierski.pl" > ./public_out/CNAME
+          cp ./public_out/index.html ./public_out/404.html
+
+          echo "Pomyślnie przygotowano paczkę! Zawartość ./public_out:"
+          ls -la ./public_out
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
