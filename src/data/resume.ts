@@ -17,7 +17,7 @@ export const profile = {
   links: [
     { label: "GitHub", href: "https://github.com/PiotrKazimierski" },
     { label: "Tech Blog — ApexPredator.cloud", href: "https://apexpredator.cloud" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/piotr-kazimierski" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/piotr-kazimierski-73168a63/" },
   ],
 };
 
