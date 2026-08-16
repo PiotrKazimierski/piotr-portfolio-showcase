@@ -36,37 +36,34 @@ jobs:
         run: |
           mkdir -p ./public_out
 
-          # 1. Kopiowanie wygenerowanych plików statycznych
+          # 1. Wybierz folder z wybudowaną aplikacją (.output/public dla TanStack Start lub dist dla Vite)
+          BUILD_DIR=""
           if [ -d .output/public ]; then
-            cp -r .output/public/* ./public_out/
+            BUILD_DIR=".output/public"
           elif [ -d dist ]; then
-            cp -r dist/* ./public_out/
+            BUILD_DIR="dist"
+          else
+            echo "BŁĄD: Nie znaleziono folderu z wybudowaną aplikacją!"
+            exit 1
           fi
 
-          # 2. Jeśli TanStack wygenerował _shell.html, użyj go jako index.html
+          # 2. Skopiuj wygenerowane pliki
+          cp -r $BUILD_DIR/* ./public_out/
+
+          # 3. Jeśli TanStack wygenerował skompilowany _shell.html, użyj go jako index.html
           if [ -f ./public_out/_shell.html ]; then
             cp ./public_out/_shell.html ./public_out/index.html
-          fi
-
-          # 3. Jeśli nadal brak index.html, utwórz go automatycznie na podstawie zbudowanych skryptów w assets
-          if [ ! -f ./public_out/index.html ]; then
-            echo "Tworzę plik index.html na podstawie wygenerowanych zasobów JS/CSS..."
-            
-            CSS_FILE=$(find ./public_out/assets -name "*.css" 2>/dev/null | head -n 1 | sed 's|\./public_out||')
-            JS_MAIN=$(find ./public_out/assets -name "index-*.js" 2>/dev/null | head -n 1 | sed 's|\./public_out||')
-            JS_ROUTES=$(find ./public_out/assets -name "routes-*.js" 2>/dev/null | head -n 1 | sed 's|\./public_out||')
-
-            echo '<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Piotr Kazimierski - Portfolio</title>' > ./public_out/index.html
-            if [ -n "$CSS_FILE" ]; then echo "<link rel=\"stylesheet\" href=\"$CSS_FILE\">" >> ./public_out/index.html; fi
-            echo '</head><body><div id="root"></div><div id="app"></div>' >> ./public_out/index.html
-            if [ -n "$JS_ROUTES" ]; then echo "<script type=\"module\" src=\"$JS_ROUTES\"></script>" >> ./public_out/index.html; fi
-            if [ -n "$JS_MAIN" ]; then echo "<script type=\"module\" src=\"$JS_MAIN\"></script>" >> ./public_out/index.html; fi
-            echo '</body></html>' >> ./public_out/index.html
           fi
 
           # 4. Ustawienie własnej domeny oraz obsługa odświeżania podstron (404.html)
           echo "piotrkazimierski.pl" > ./public_out/CNAME
           cp ./public_out/index.html ./public_out/404.html
+
+          # 5. Weryfikacja
+          if [ ! -f ./public_out/index.html ]; then
+            echo "BŁĄD: Nie znaleziono pliku index.html ani _shell.html!"
+            exit 1
+          fi
 
           echo "Pomyślnie przygotowano paczkę! Zawartość ./public_out:"
           ls -la ./public_out
