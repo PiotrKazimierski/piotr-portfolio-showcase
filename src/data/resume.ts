@@ -1,20 +1,54 @@
 export const profile = {
   name: "Piotr Kazimierski",
-  role: "Senior Salesforce Developer",
-  tagline: "Software Engineering & Decoupled Architecture",
+  role: "Senior Salesforce Engineer",
+  tagline: "Enterprise Integration Specialist & System Architect",
+  intro:
+    "Architecting high-throughput cloud ecosystems, decoupled systems & multi-cloud enterprise solutions.",
   email: "piotr.kazimierski92@wp.pl",
   phone: "+48 697 340 405",
   location: "Poland",
   summary:
     "Senior Software Engineer focused on architecting and developing scalable solutions within the Salesforce ecosystem. Expert in Apex Enterprise Patterns (FFLIB/AWAF) and robust backend development, with extensive experience integrating Salesforce with Java-based microservices and AWS cloud-native architectures. Proven track record of delivering mission-critical systems (KYC, Onboarding, Lead Management) for large-scale financial environments.",
-  certifications: ["Salesforce Platform Developer II", "Agentforce Specialist"],
+  certifications: [
+    "Salesforce Certified Platform Developer I",
+    "Salesforce Certified Platform Developer II (PD2)",
+    "Salesforce Certified Agentforce Specialist",
+  ],
+  links: [
+    { label: "GitHub", href: "https://github.com/PiotrKazimierski" },
+    { label: "Tech Blog — ApexPredator.cloud", href: "https://apexpredator.cloud" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/piotr-kazimierski" },
+  ],
 };
 
 export const stats = [
-  { value: "8+", label: "Years engineering" },
-  { value: "FFLIB", label: "Enterprise patterns" },
+  { value: "15+", label: "Years in software engineering" },
+  { value: "5+", label: "Years in Salesforce" },
   { value: "KYC", label: "Fintech scale systems" },
-  { value: "2", label: "Certifications" },
+  { value: "3", label: "Salesforce certifications" },
+];
+
+export const competencies = [
+  {
+    title: "System & Solution Architecture",
+    body: "End-to-end design of scalable enterprise systems, database modeling, identity management (OAuth2/SAML) and secure API gateways using EDA, DDD and microservices.",
+  },
+  {
+    title: "Enterprise Salesforce Stack",
+    body: "Deep technical governance across Platform Developer II, Agentforce, Financial Services Cloud, OmniStudio and Experience Cloud.",
+  },
+  {
+    title: "Multi-Cloud Integrations",
+    body: "Connecting Salesforce ecosystems with external backends via AWS Lambda, REST/SOAP APIs and messaging buses.",
+  },
+  {
+    title: "DevOps, CI/CD & Automation",
+    body: "Custom metadata comparison engines, automated deployment pipelines (SFDX, Python CLI tooling) and Infrastructure as Code.",
+  },
+  {
+    title: "Quality & Security Assurance",
+    body: "GoF design patterns, defensive programming, high test coverage and strict performance optimization to eliminate technical debt.",
+  },
 ];
 
 export const skills = [
@@ -26,6 +60,8 @@ export const skills = [
       "Aura → LWC migration",
       "FFLIB / AWAF",
       "Financial Services Cloud",
+      "OmniStudio",
+      "Experience Cloud",
       "2GP Packaging",
       "Pub/Sub API, CDC, Platform Events",
       "SOQL / SOSL & LDV",
@@ -39,9 +75,12 @@ export const skills = [
       "Node.js / TypeScript",
       "AWS Lambda & serverless",
       "C# / .NET",
+      "C / C++",
       "Kotlin",
       "Python",
       "REST / SOAP integrations",
+      "OAuth2 / SAML identity",
+      "EDA · DDD · Microservices",
       "SQL (MySQL / MariaDB)",
     ],
   },
