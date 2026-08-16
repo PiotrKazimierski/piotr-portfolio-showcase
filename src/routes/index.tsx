@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import photo from "@/assets/piotr.jpg.asset.json";
 import resumePdf from "@/assets/resume.pdf.asset.json";
-import { experience, profile, skills, stats } from "@/data/resume";
+import { competencies, experience, profile, skills, stats } from "@/data/resume";
 
-const title = "Piotr Kazimierski — Senior Salesforce Developer & Software Engineer";
+const title = "Piotr Kazimierski — Senior Salesforce Engineer & System Architect";
 const description =
-  "Portfolio of Piotr Kazimierski: Senior Salesforce Developer specialising in Apex Enterprise Patterns, LWC, Java microservices and AWS architecture for financial platforms.";
+  "Portfolio of Piotr Kazimierski: Senior Salesforce Engineer, enterprise integration specialist and system architect working with Apex, LWC, Java microservices and AWS.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/")({
 
 const nav = [
   { href: "#about", label: "About" },
+  { href: "#architecture", label: "Architecture" },
   { href: "#experience", label: "Experience" },
   { href: "#skills", label: "Skills" },
   { href: "#contact", label: "Contact" },
@@ -37,6 +38,7 @@ const jsonLd = {
   email: `mailto:${profile.email}`,
   telephone: profile.phone,
   url: "https://piotrkazimierski.pl/",
+  sameAs: profile.links.map((l) => l.href),
   address: { "@type": "PostalAddress", addressCountry: "PL" },
   knowsAbout: ["Salesforce", "Apex", "Lightning Web Components", "Java", "AWS", "TypeScript"],
 };
@@ -83,6 +85,7 @@ function Index() {
               <p className="mt-4 font-mono text-base text-primary sm:text-lg">
                 {profile.role} <span className="text-muted-foreground">/ {profile.tagline}</span>
               </p>
+              <p className="mt-3 max-w-2xl text-sm text-accent">{profile.intro}</p>
               <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
                 {profile.summary}
               </p>
@@ -99,6 +102,19 @@ function Index() {
                 >
                   View experience
                 </a>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-4 font-mono text-xs text-muted-foreground">
+                {profile.links.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-4 transition-colors hover:text-primary hover:underline"
+                  >
+                    {l.label} ↗
+                  </a>
+                ))}
               </div>
             </div>
             <div className="justify-self-center">
@@ -131,8 +147,21 @@ function Index() {
           </div>
         </section>
 
-        <section id="experience" className="mx-auto max-w-5xl px-6 py-20">
-          <p className="mono-label">01 / Experience</p>
+        <section id="architecture" className="mx-auto max-w-5xl px-6 py-20">
+          <p className="mono-label">01 / Architecture</p>
+          <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Architectural competencies</h2>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {competencies.map((c) => (
+              <div key={c.title} className="panel p-6">
+                <h3 className="text-base font-semibold text-primary">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="experience" className="mx-auto max-w-5xl border-t border-border px-6 py-20">
+          <p className="mono-label">02 / Experience</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Where I've built things</h2>
 
           <div className="mt-12 space-y-6">
@@ -174,7 +203,7 @@ function Index() {
 
         <section id="skills" className="border-t border-border bg-surface">
           <div className="mx-auto max-w-5xl px-6 py-20">
-            <p className="mono-label">02 / Toolbox</p>
+            <p className="mono-label">03 / Toolbox</p>
             <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Technologies I work with</h2>
             <div className="mt-12 grid gap-8 md:grid-cols-3">
               {skills.map((s) => (
@@ -196,7 +225,7 @@ function Index() {
 
         <section id="contact" className="border-t border-border">
           <div className="mx-auto max-w-5xl px-6 py-20 text-center">
-            <p className="mono-label">03 / Contact</p>
+            <p className="mono-label">04 / Contact</p>
             <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Let's talk architecture</h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
               Open to senior engineering and architecture work in the Salesforce and cloud space.
