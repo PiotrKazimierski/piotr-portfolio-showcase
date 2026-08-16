@@ -32,16 +32,15 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Find index.html and prepare output
+      - name: Prepare build artifacts
         run: |
           mkdir -p ./public_out
           
-          # Szukamy folderu zawierającego zbudowany index.html
+          # Szukamy skompilowanego pliku index.html
           INDEX_FILE=$(find . -name "index.html" -not -path "*/node_modules/*" -not -path "./index.html" | head -n 1)
           
           if [ -z "$INDEX_FILE" ]; then
-            echo "BŁĄD: Nie znaleziono zkompilowanego index.html!"
-            ls -la
+            echo "BŁĄD: Nie znaleziono skompilowanego index.html!"
             exit 1
           fi
           
@@ -51,9 +50,6 @@ jobs:
           cp -r $BUILD_DIR/* ./public_out/
           echo "piotrkazimierski.pl" > ./public_out/CNAME
           cp ./public_out/index.html ./public_out/404.html
-          
-          echo "Zawartość paczki do opublikowania:"
-          ls -la ./public_out
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
