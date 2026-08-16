@@ -4,5 +4,8 @@ export default defineConfig({
   tanstackStart: {
     spaMode: true,
   },
+  nitro: {
+    preset: "static",
+  },
   base: "/",
 });
