@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
         run: npm install
@@ -36,18 +36,13 @@ jobs:
         run: |
           mkdir -p ./public_out
           if [ -d ".output/public" ]; then
-            echo "Found .output/public"
             cp -r .output/public/* ./public_out/
           elif [ -d "dist" ]; then
-            echo "Found dist"
             cp -r dist/* ./public_out/
-          else
-            echo "Error: No build directory found!"
-            exit 1
           fi
           
-          # Generowanie 404.html dla obsługi routingu SPA w GitHub Pages
-          if [ -f "./public_out/index.html" ] && [ ! -f "./public_out/404.html" ]; then
+          # Kopiowanie index.html do 404.html dla poprawnego routingu SPA
+          if [ -f "./public_out/index.html" ]; then
             cp ./public_out/index.html ./public_out/404.html
           fi
 
