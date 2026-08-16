@@ -32,22 +32,28 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Prepare build artifacts
+      - name: Find index.html and prepare output
         run: |
           mkdir -p ./public_out
-          if [ -d ".output/public" ]; then
-            cp -r .output/public/* ./public_out/
-          elif [ -d "dist" ]; then
-            cp -r dist/* ./public_out/
+          
+          # Szukamy folderu zawierającego zbudowany index.html
+          INDEX_FILE=$(find . -name "index.html" -not -path "*/node_modules/*" -not -path "./index.html" | head -n 1)
+          
+          if [ -z "$INDEX_FILE" ]; then
+            echo "BŁĄD: Nie znaleziono zkompilowanego index.html!"
+            ls -la
+            exit 1
           fi
-
-          # Wymagane dla własnej domeny w GitHub Actions
+          
+          BUILD_DIR=$(dirname "$INDEX_FILE")
+          echo "Znaleziono skompilowany projekt w: $BUILD_DIR"
+          
+          cp -r $BUILD_DIR/* ./public_out/
           echo "piotrkazimierski.pl" > ./public_out/CNAME
-
-          # Wymagane dla routingu SPA (przeładowania stron)
-          if [ -f "./public_out/index.html" ]; then
-            cp ./public_out/index.html ./public_out/404.html
-          fi
+          cp ./public_out/index.html ./public_out/404.html
+          
+          echo "Zawartość paczki do opublikowania:"
+          ls -la ./public_out
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
