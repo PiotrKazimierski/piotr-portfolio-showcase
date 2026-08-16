@@ -1,6 +1,5 @@
 # Piotrkazimierski.pl Portfolio
 
-Based on my reaume build static website (portfolio) something simmilar to https://ghodasaranatavar.github.io/ or https://web.archive.org/web/20241002075649/https://adriankurek.pl/ that will be available under piotrkazimierski.pl domain
 
 This project was built with [Lovable](https://lovable.dev).
 
