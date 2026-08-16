@@ -40,8 +40,11 @@ jobs:
           elif [ -d "dist" ]; then
             cp -r dist/* ./public_out/
           fi
-          
-          # Kopiowanie index.html do 404.html dla poprawnego routingu SPA
+
+          # Wymagane dla własnej domeny w GitHub Actions
+          echo "piotrkazimierski.pl" > ./public_out/CNAME
+
+          # Wymagane dla routingu SPA (przeładowania stron)
           if [ -f "./public_out/index.html" ]; then
             cp ./public_out/index.html ./public_out/404.html
           fi
