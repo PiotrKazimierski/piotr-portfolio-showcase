@@ -6,7 +6,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 const staticExport = process.env["STATIC_EXPORT"] === "1";
 
 export default defineConfig({
-  ...(staticExport ? { nitro: { preset: "node-server" as const } } : {}),
+  ...(staticExport ? { nitro: false as const } : {}),
   tanstackStart: {
     spaMode: true,
     ...(staticExport
