@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import photo from "@/assets/piotr.jpg.asset.json";
-import resumePdf from "@/assets/resume.pdf.asset.json";
+import photo from "@/assets/piotr.jpg";
+
+const resumePdfUrl = "/Piotr_Kazimierski_Resume.pdf";
 import { competencies, experience, profile, skills, stats } from "@/data/resume";
 
 const title = "Piotr Kazimierski — Senior Salesforce Engineer & System Architect";
@@ -61,7 +62,7 @@ function Index() {
             ))}
           </nav>
           <a
-            href={resumePdf.url}
+            href={resumePdfUrl}
             target="_blank"
             rel="noopener"
             className="rounded-md border border-primary/50 px-3 py-1.5 font-mono text-xs text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
@@ -120,7 +121,7 @@ function Index() {
             <div className="justify-self-center">
               <div className="panel overflow-hidden rounded-2xl p-2">
                 <img
-                  src={photo.url}
+                  src={photo}
                   alt="Portrait of Piotr Kazimierski"
                   width={260}
                   height={260}
@@ -244,7 +245,7 @@ function Index() {
                 {profile.phone}
               </a>
               <a
-                href={resumePdf.url}
+                href={resumePdfUrl}
                 target="_blank"
                 rel="noopener"
                 className="rounded-md border border-border px-5 py-2.5 transition-colors hover:bg-secondary"
