@@ -29,76 +29,43 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Build static site
         run: npm run build
+        env:
+          STATIC_EXPORT: "1"
 
       - name: Prepare build files for GitHub Pages
         run: |
           mkdir -p ./public_out
 
-          # 1. Sprawdź, w którym katalogu powstała wybudowana aplikacja
-          if [ -f dist/index.html ]; then
-            echo "Znaleziono zbudowaną aplikację w katalogu dist/"
-            cp -r dist/* ./public_out/
-          elif [ -f .output/public/index.html ]; then
-            echo "Znaleziono zbudowaną aplikację w katalogu .output/public/"
-            cp -r .output/public/* ./public_out/
-          elif [ -f .output/public/_shell.html ]; then
-            echo "Znaleziono _shell.html w katalogu .output/public/"
-            cp -r .output/public/* ./public_out/
-            cp ./public_out/_shell.html ./public_out/index.html
+          # 1. Copy the static client build output
+          if [ -d dist/client ]; then
+            cp -r dist/client/. ./public_out/
+          elif [ -d .output/public ]; then
+            cp -r .output/public/. ./public_out/
           else
-            echo "Kopiowanie dostępnych zasobów z .output/public lub dist..."
-            if [ -d .output/public ]; then cp -r .output/public/* ./public_out/; fi
-            if [ -d dist ]; then cp -r dist/* ./public_out/; fi
-          fi
-
-          # 2. Jeśli nadal brak index.html, wygeneruj go dynamicznie z wybudowanych skryptów JS i CSS
-          if [ ! -f ./public_out/index.html ]; then
-            echo "Generuję plik index.html na podstawie znalezionych zasobów w assets..."
-            
-            CSS_TAGS=""
-            for f in $(find ./public_out -name "*.css" 2>/dev/null); do
-              rel_path="${f#./public_out}"
-              CSS_TAGS="${CSS_TAGS}<link rel=\"stylesheet\" href=\"${rel_path}\">\n"
-            done
-
-            JS_TAGS=""
-            for f in $(find ./public_out -name "*.js" 2>/dev/null); do
-              rel_path="${f#./public_out}"
-              JS_TAGS="${JS_TAGS}<script type=\"module\" src=\"${rel_path}\"></script>\n"
-            done
-
-            cat <<EOF > ./public_out/index.html
-<!DOCTYPE html>
-<html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Piotr Kazimierski - Portfolio</title>
-    $(echo -e "$CSS_TAGS")
-  </head>
-  <body>
-    <div id="root"></div>
-    <div id="app"></div>
-    $(echo -e "$JS_TAGS")
-  </body>
-</html>
-EOF
-          fi
-
-          # 3. Ustawienie własnej domeny
-          echo "piotrkazimierski.pl" > ./public_out/CNAME
-
-          # 4. Bezpieczne utworzenie pliku 404.html do obsługi routingu SPA
-          if [ -f ./public_out/index.html ]; then
-            cp ./public_out/index.html ./public_out/404.html
-          else
-            echo "BŁĄD: Nie udało się utworzyć ani odnaleźć pliku index.html!"
+            echo "ERROR: no static build output found (dist/client or .output/public)"
             exit 1
           fi
 
-          echo "Pomyślnie przygotowano paczkę w ./public_out:"
+          # 2. Fall back to the app shell if prerendering produced no index.html
+          if [ ! -f ./public_out/index.html ] && [ -f ./public_out/_shell.html ]; then
+            cp ./public_out/_shell.html ./public_out/index.html
+          fi
+
+          # 3. Custom domain + disable Jekyll (needed for _-prefixed folders)
+          echo "piotrkazimierski.pl" > ./public_out/CNAME
+          touch ./public_out/.nojekyll
+
+          # 4. SPA fallback for deep links
+          if [ -f ./public_out/index.html ]; then
+            cp ./public_out/index.html ./public_out/404.html
+          else
+            echo "ERROR: index.html missing from build output!"
+            exit 1
+          fi
+
+          echo "Prepared static bundle in ./public_out:"
           ls -la ./public_out
 
       - name: Upload artifact
