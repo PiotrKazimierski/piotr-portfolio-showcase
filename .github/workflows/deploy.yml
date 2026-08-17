@@ -29,24 +29,26 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Build static site
         run: npm run build
+        env:
+          STATIC_EXPORT: "1"
 
       - name: Prepare build files for GitHub Pages
         run: |
           mkdir -p ./public_out
 
-          # 1. Copy the static build output
-          if [ -d .output/public ]; then
+          # 1. Copy the static client build output
+          if [ -d dist/client ]; then
+            cp -r dist/client/. ./public_out/
+          elif [ -d .output/public ]; then
             cp -r .output/public/. ./public_out/
-          elif [ -d dist ]; then
-            cp -r dist/. ./public_out/
           else
-            echo "ERROR: no build output found (.output/public or dist)"
+            echo "ERROR: no static build output found (dist/client or .output/public)"
             exit 1
           fi
 
-          # 2. Fall back to the app shell if prerendering produced none
+          # 2. Fall back to the app shell if prerendering produced no index.html
           if [ ! -f ./public_out/index.html ] && [ -f ./public_out/_shell.html ]; then
             cp ./public_out/_shell.html ./public_out/index.html
           fi
