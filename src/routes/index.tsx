@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import photo from "@/assets/piotr.jpg";
-
-const resumePdfUrl = "/Piotr_Kazimierski_Resume.pdf";
 import { competencies, experience, profile, skills, stats } from "@/data/resume";
 
 const title = "Piotr Kazimierski — Senior Salesforce Engineer & System Architect";
@@ -37,7 +35,6 @@ const jsonLd = {
   name: profile.name,
   jobTitle: profile.role,
   email: `mailto:${profile.email}`,
-  telephone: profile.phone,
   url: "https://piotrkazimierski.pl/",
   sameAs: profile.links.map((l) => l.href),
   address: { "@type": "PostalAddress", addressCountry: "PL" },

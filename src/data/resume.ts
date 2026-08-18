@@ -5,7 +5,6 @@ export const profile = {
   intro:
     "Architecting high-throughput cloud ecosystems, decoupled systems & multi-cloud enterprise solutions.",
   email: "piotr.kazimierski92@wp.pl",
-  phone: "+48 697 340 405",
   location: "Poland",
   summary:
     "Senior Software Engineer focused on architecting and developing scalable solutions within the Salesforce ecosystem. Expert in Apex Enterprise Patterns (FFLIB/AWAF) and robust backend development, with extensive experience integrating Salesforce with Java-based microservices and AWS cloud-native architectures. Proven track record of delivering mission-critical systems (KYC, Onboarding, Lead Management) for large-scale financial environments.",
