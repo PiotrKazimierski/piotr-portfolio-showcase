@@ -58,14 +58,6 @@ function Index() {
               </a>
             ))}
           </nav>
-          <a
-            href={resumePdfUrl}
-            target="_blank"
-            rel="noopener"
-            className="rounded-md border border-primary/50 px-3 py-1.5 font-mono text-xs text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-          >
-            Resume ↓
-          </a>
         </div>
       </header>
 
@@ -234,20 +226,6 @@ function Index() {
                 className="rounded-md bg-primary px-5 py-2.5 text-primary-foreground transition-opacity hover:opacity-90"
               >
                 {profile.email}
-              </a>
-              <a
-                href={`tel:${profile.phone.replace(/\s/g, "")}`}
-                className="rounded-md border border-border px-5 py-2.5 transition-colors hover:bg-secondary"
-              >
-                {profile.phone}
-              </a>
-              <a
-                href={resumePdfUrl}
-                target="_blank"
-                rel="noopener"
-                className="rounded-md border border-border px-5 py-2.5 transition-colors hover:bg-secondary"
-              >
-                Download CV (PDF)
               </a>
             </div>
           </div>
